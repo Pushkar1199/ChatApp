@@ -5,8 +5,8 @@ const userList = document.getElementById('users');
 
 
 //Get username and room
-const {username,room} = Qs.parse(location.search,{
-    ignoreQueryPrefix:true
+const { username, room } = Qs.parse(location.search, {
+    ignoreQueryPrefix: true
 });
 
 //console.log(username,room);
@@ -14,20 +14,20 @@ const {username,room} = Qs.parse(location.search,{
 const socket = io();
 
 //Join chatroom
-socket.emit('joinRoom',{username,room})
+socket.emit('joinRoom', { username, room })
 
 //Get room and Users in it
-socket.on('roomUsers', ({room,users}) => {
+socket.on('roomUsers', ({ room, users }) => {
     outputRoomName(room);
     outputUsers(users);
 });
 
 
 //message from server
-socket.on('message',message => {
+socket.on('message', message => {
     console.log(message);
     outputMessage(message);
-    
+
 
     //Scroll down
     chatMessages.scrollTop = chatMessages.scrollHeight;
@@ -42,7 +42,7 @@ chatForm.addEventListener('submit', (e) => {
     const msg = e.target.elements.msg.value;
 
     // emit message to server
-    socket.emit('chatMessage',msg);
+    socket.emit('chatMessage', msg);
 
     //clear input
     e.target.elements.msg.value = '';
@@ -51,7 +51,7 @@ chatForm.addEventListener('submit', (e) => {
 });
 
 //output message to DOM
-function outputMessage(message){
+function outputMessage(message) {
     const div = document.createElement('div');
     div.classList.add('message');
     div.innerHTML = `<p class="meta">${message.username} <span>${message.time}</span></p>
@@ -62,12 +62,12 @@ function outputMessage(message){
 }
 
 //Add roomname to DOM
-function outputRoomName(room){
+function outputRoomName(room) {
     roomName.innerText = room;
 }
 
 // add users to DOM 
-function outputUsers(users){
+function outputUsers(users) {
     userList.innerHTML = `
     ${users.map(user => `<li>${user.username}</li>`).join('')}
     `;
